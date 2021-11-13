@@ -1,6 +1,6 @@
 const express = require('express');
+const crypto = require('crypto');
 const cors = require('cors');
-const { off } = require('process');
 const app = express();
 
 const EMPLOYEES = JSON.parse(require('fs').readFileSync(require('path').resolve(__dirname, 'Data.json'))).results?.reduce((acc, e) => {
@@ -13,12 +13,15 @@ app.use(express.json());
 
 app.post('/login', (req, res) => {
 
-    let { username, password } = req.body
+    const { username, password } = req.body
+
 
     let user = EMPLOYEES[username];
-    console.log(user)
 
-    if (!user || user.login.sha256 !== password) return res.sendStatus(403);
+    if (!user) res.sendStatus(403);
+
+    const hash = crypto.createHash('sha256').update(`${password}${user.login.salt}`).digest('hex');
+    if (user.login.sha256 !== hash) return res.sendStatus(403);
 
     res.send({
         token: user.login.uuid
