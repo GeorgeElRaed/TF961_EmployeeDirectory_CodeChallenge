@@ -43,5 +43,17 @@ app.get('/employees', (req, res) => {
     }, {}));
 });
 
+app.get('/employees/:username', (req, res) => {
+    let { username } = req.params;
+
+    if (!EMPLOYEES[username]) res.sendStatus(404);
+
+    res.send(EMPLOYEES[username]);
+});
+
+app.get('/employees-count', (req, res) => {
+    res.send({ count: Object.keys(EMPLOYEES).length });
+});
+
 
 app.listen(8080, () => console.log('API is running on http://localhost:8080'));
