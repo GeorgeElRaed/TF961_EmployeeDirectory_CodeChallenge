@@ -56,8 +56,8 @@ app.get('/employees/:username', (req, res) => {
 });
 
 app.delete('/employees', (req, res) => {
-    const { username } = req.body;
-    if (username) DELETED_EMPLOYEES.push(username);
+    const { usernames } = req.body;
+    if (usernames) DELETED_EMPLOYEES.push(...usernames);
     res.sendStatus(200);
 });
 

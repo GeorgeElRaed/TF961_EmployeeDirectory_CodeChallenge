@@ -17,6 +17,7 @@ export default function GridFilter({ selected, setRowSize, updateGrid }) {
     }
 
     function deleteSelected() {
+        axios.delete(process.env.REACT_APP_API_FETCH_EMPLOYEES, { username: })
         updateGrid();
     }
 
