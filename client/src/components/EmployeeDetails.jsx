@@ -10,6 +10,8 @@ import Colors from '../utils/Colors'
 export default function EmployeeDetails() {
     const { username } = useParams();
 
+    const gradient = generateLinearGradient(username);
+
     const [user, setUser] = useState({});
     const [isError, setError] = useState();
 
@@ -27,7 +29,9 @@ export default function EmployeeDetails() {
                 direction='column'
                 alignItems='center'
                 justifyContent='center'
-                style={{ minHeight: '100%' }}
+                style={{
+                    minHeight: '100%',
+                }}
             >
 
                 {isError ?
@@ -72,20 +76,22 @@ export default function EmployeeDetails() {
                             <Container style={{
                                 marginTop: '1rem',
                                 display: 'inline-flex',
+
+
                             }}>
                                 <Container style={{ padding: '0', display: 'flex', flexDirection: 'column' }}>
-                                    <StyledCard>
+                                    <StyledCard gradient={gradient}>
                                         <DetailsRow icon={<Fingerprint />}>UUID: {user?.login?.uuid}</DetailsRow>
                                         <DetailsRow icon={<PermIdentity />}>Username: {user?.login?.username}</DetailsRow>
                                     </StyledCard>
-                                    <StyledCard>
+                                    <StyledCard gradient={gradient}>
                                         <DetailsRow icon={<CalendarToday />}>Date Of Birth: {moment(user?.dob?.date).format('Do MMMM YYYY')}</DetailsRow>
                                         <DetailsRow icon={<AppRegistration />}>Registered On: {moment(user?.registered?.date).format('Do MMMM YYYY')}</DetailsRow>
                                         <DetailsRow icon={<ExploreOutlined />}>Nationality: {user?.nat}</DetailsRow>
                                     </StyledCard>
                                 </Container>
                                 <Container style={{ padding: '0', display: 'flex' }}>
-                                    <StyledCard>
+                                    <StyledCard gradient={gradient}>
                                         <DetailsRow icon={<EmailOutlined />}>Email: {user?.email}</DetailsRow>
                                         <DetailsRow icon={<PermIdentity />}>Home Phone: {user?.phone}</DetailsRow>
                                         <DetailsRow icon={<CalendarToday />}>Cellphone: {user?.cell}</DetailsRow>
@@ -104,8 +110,8 @@ export default function EmployeeDetails() {
                                 marginTop: '2rem',
                                 padding: '0'
                             }}>
-                                <StyledButton username={username} variant="contained" color="primary" href={`mailto:${user?.email}`}>Email</StyledButton>
-                                <StyledButton username={username} variant="contained" color="primary" href={`tel:${user?.cell}`}>Call</StyledButton>
+                                <StyledButton gradient={gradient} variant="contained" color="primary" href={`mailto:${user?.email}`}>Email</StyledButton>
+                                <StyledButton gradient={gradient} variant="contained" color="primary" href={`tel:${user?.cell}`}>Call</StyledButton>
                             </Container>
                         </Grid>
 
@@ -145,20 +151,22 @@ function DetailsRow({ icon, children, ...props }) {
     )
 }
 
-function StyledButton({ username, children, ...props }) {
+function StyledButton({ gradient, children, ...props }) {
     return (
         <Button {...props} style={{
             height: '3.5srem',
             width: '15rem',
             borderRadius: '3rem',
             border: 'none',
+            backgroundImage: gradient,
+            backgroundAttachment: 'fixed',
         }}>
             {children}
         </Button>
     );
 }
 
-function StyledCard({ children, ...props }) {
+function StyledCard({ gradient, children, ...props }) {
     return (
         <Card {...props} style={{ // TODO: use stylable components
             padding: '1rem',
@@ -166,7 +174,10 @@ function StyledCard({ children, ...props }) {
             border: '2px solid lightgray',
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'space-evenly'
+            justifyContent: 'space-evenly',
+            backgroundImage: gradient,
+            backgroundSize: 'cover',
+            backgroundAttachment: 'fixed'
         }}>
             {children}
         </Card>
