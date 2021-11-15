@@ -46,11 +46,10 @@ export default function EmployeesGrid() {
         (async () => {
             setLoading(true);
 
-            if (rowCount === 0) {
+            {
                 const { data } = await axios.get(process.env.REACT_APP_API_FETCH_EMPLOYEES_COUNT);
                 setRowCount(data.count)
             }
-
             const { data } = await axios.get(`${process.env.REACT_APP_API_FETCH_EMPLOYEES}?offset=${page * pageSize}&limit=${pageSize}`);
             const newRows = Object.keys(data).map(key => {
                 const { name, login, dob, nat } = data[key];

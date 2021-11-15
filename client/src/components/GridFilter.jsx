@@ -17,8 +17,10 @@ export default function GridFilter({ selected, setRowSize, updateGrid }) {
     }
 
     function deleteSelected() {
-        axios.delete(process.env.REACT_APP_API_FETCH_EMPLOYEES, { username: })
-        updateGrid();
+        console.log({ usernames: selected.map(({ login }) => login?.uuid) })
+        axios.delete(process.env.REACT_APP_API_FETCH_EMPLOYEES, { data: { usernames: selected.map(({ login }) => login?.username) } })
+            .then(_ => updateGrid())
+            .catch(err => console.error(err));
     }
 
     function updateEmployee() {

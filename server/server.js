@@ -32,6 +32,18 @@ app.post('/login', (req, res) => {
 
 });
 
+app.get('/employees', (req, res) => {
+    let { offset = 0, limit = Object.keys(EMPLOYEES).length } = req.query;
+    offset = parseInt(offset);
+    limit = parseInt(limit);
+
+    res.send(Object.keys(EMPLOYEES)
+        .filter(e => !DELETED_EMPLOYEES.includes(e))
+        .slice(offset, offset + limit).reduce((acc, key) => {
+            acc[key] = EMPLOYEES[key];
+            return acc;
+        }, {}));
+});
 
 app.get('/employees', (req, res) => {
     let { offset = 0, limit = Object.keys(EMPLOYEES).length } = req.query;
@@ -62,7 +74,7 @@ app.delete('/employees', (req, res) => {
 });
 
 app.get('/employees-count', (req, res) => {
-    res.send({ count: Object.keys(EMPLOYEES).length });
+    res.send({ count: Object.keys(EMPLOYEES).filter(e => !DELETED_EMPLOYEES.includes(e)).length });
 });
 
 app.listen(8080, () => console.log('API is running on http://localhost:8080'));
