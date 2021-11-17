@@ -4,7 +4,7 @@ import axios from "axios";
 import moment from "moment";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import GridFilter from "./GridFilter";
+import GridToolbar from "./GridToolbar";
 
 export default function EmployeesGrid() {
 
@@ -42,7 +42,6 @@ export default function EmployeesGrid() {
     useEffect(() => {
         let active = true;
 
-
         (async () => {
             setLoading(true);
 
@@ -70,6 +69,7 @@ export default function EmployeesGrid() {
             setData(Object.keys(data).map(key => data[key]))
             setRows(newRows);
             setLoading(false);
+            setSelected([]);
         })();
 
         return () => {
@@ -80,7 +80,7 @@ export default function EmployeesGrid() {
 
     return (
         <Paper style={{ height: '86.5vh', width: '100%' }}>
-            <GridFilter selected={selected} setRowSize={setRowSize} updateGrid={updateGrid} />
+            <GridToolbar selected={selected} setRowSize={setRowSize} updateGrid={updateGrid} />
             <DataGrid
                 rows={rows}
                 rowHeight={rowSize}
@@ -92,6 +92,7 @@ export default function EmployeesGrid() {
                 autoPageSize
                 checkboxSelection
                 pagination
+                selectionModel={selected.map(({ login }) => login.uuid)}
                 onPageChange={(nv) => setPage(nv)}
                 onPageSizeChange={(nv) => setPageSize(nv)}
                 onRowDoubleClick={({ row }) => navigate(row.username)}

@@ -2,33 +2,46 @@ import { Button, Container, Divider, IconButton, Typography } from "@material-ui
 import { DeleteForeverRounded, FilterList, HeightRounded, MoreHoriz, PlusOneRounded, TableRowsRounded, UpdateRounded } from "@mui/icons-material";
 import axios from "axios";
 import { useState } from "react";
+import EmployeeDialog from "./EmployeeDialog";
+import DeleteConfirmation from "./DeleteConfirmation";
 import GridHeightMenu from "./GridHeightMenu";
 import GridMenu from "./GridMenu";
 import ToolbarStyle from "./ToolbarStyle";
 
-export default function GridFilter({ selected, setRowSize, updateGrid }) {
+export default function GridToolbar({ selected, setRowSize, updateGrid }) {
 
     const [visible, setVisible] = useState(false);
     const [heightMenuVisible, setHeightMenuVisible] = useState(false);
 
+    const [addOpen, setAddOpen] = useState(false);
+    const [updateOpen, setUpdateOpen] = useState(false);
+    const [deleteOpen, setDeleteOpen] = useState(false);
 
     function addEmployee() {
+        setAddOpen(true);
+    }
 
+    function confirmDelete() {
+        setDeleteOpen(true)
     }
 
     function deleteSelected() {
-        console.log({ usernames: selected.map(({ login }) => login?.uuid) })
         axios.delete(process.env.REACT_APP_API_FETCH_EMPLOYEES, { data: { usernames: selected.map(({ login }) => login?.username) } })
-            .then(_ => updateGrid())
+            .then(_ => { updateGrid(); setDeleteOpen(false); })
             .catch(err => console.error(err));
+
     }
 
     function updateEmployee() {
+        setUpdateOpen(true);
     }
 
 
     return (
         <>
+            <EmployeeDialog open={addOpen} setOpen={setAddOpen} updateGrid={updateGrid} />
+            <EmployeeDialog open={updateOpen} setOpen={setUpdateOpen} updateGrid={updateGrid} employee={selected[0]} />
+            <DeleteConfirmation open={deleteOpen} setOpen={setDeleteOpen} handleCancel={_ => setDeleteOpen(false)} handleOk={deleteSelected} />
             <Container style={{
                 display: 'flex',
                 flexDirection: 'row',
@@ -63,11 +76,11 @@ export default function GridFilter({ selected, setRowSize, updateGrid }) {
                         <PlusOneRounded /> <span style={{ marginLeft: '0.25rem' }}>Add</span>
                     </Button>
 
-                    <Button onClick={deleteSelected}>
+                    <Button disabled={(!selected || (selected.length <= 0))} onClick={confirmDelete}>
                         <DeleteForeverRounded /> <span style={{ marginLeft: '0.25rem' }}>Delete</span>
                     </Button>
 
-                    <Button onClick={updateEmployee}>
+                    <Button disabled={(!selected || (selected.length !== 1))} onClick={updateEmployee}>
                         <UpdateRounded /> <span style={{ marginLeft: '0.25rem' }}>Update</span>
                     </Button>
 
