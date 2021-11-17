@@ -1,6 +1,8 @@
 const express = require('express');
 const crypto = require('crypto');
 const cors = require('cors');
+const conditions = require('./Conditions');
+const { deepValue } = require('./Utils');
 const app = express();
 
 const EMPLOYEES = JSON.parse(require('fs').readFileSync(require('path').resolve(__dirname, 'Data.json'))).results?.reduce((acc, e) => {
@@ -31,13 +33,31 @@ app.post('/login', (req, res) => {
 
 });
 
+
 app.get('/employees', (req, res) => {
-    let { offset = 0, limit = Object.keys(EMPLOYEES).length } = req.query;
+    let { offset = 0, limit = Object.keys(EMPLOYEES).length, filters = '' } = req.query;
     offset = parseInt(offset);
     limit = parseInt(limit);
+    filters = filters.split(',').map(e => e.split('-'))
 
+    console.log(filters)
     res.send(Object.keys(EMPLOYEES)
         .filter(e => !DELETED_EMPLOYEES.includes(e))
+        .filter(e => {
+            const employee = EMPLOYEES[e];
+            if (filters.length === 0) return true;
+            for (var i in filters) {
+                var [field, condition, value] = filters[i];
+
+                try {
+                    if (!conditions[condition](deepValue(employee, field), value))
+                        return false;
+                } catch (err) {
+                    console.error(err)
+                }
+            }
+            return true;
+        })
         .slice(offset, offset + limit).reduce((acc, key) => {
             acc[key] = EMPLOYEES[key];
             return acc;
