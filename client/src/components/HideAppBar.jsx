@@ -22,12 +22,12 @@ HideOnScroll.propTypes = {
     window: PropTypes.func,
 };
 
-export default function HideAppBar({ children, ...props }) {
+export default function HideAppBar({ children, style, ...props }) {
     return (
         <React.Fragment>
             <CssBaseline />
             <HideOnScroll {...props}>
-                <AppBar position="sticky">
+                <AppBar position="sticky" style={style}>
                     <Toolbar>
                         {children}
                     </Toolbar>

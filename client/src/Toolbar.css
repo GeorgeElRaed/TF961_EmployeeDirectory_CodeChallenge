@@ -1,0 +1,16 @@
+.toolbar {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: rgb(18,18,18);
+}
+
+.toolbar .toolbar-item {
+    margin: 1rem;
+    color: white;
+    text-decoration: none;
+
+}
+
+.toolbar .toolbar-item:after {
+}
