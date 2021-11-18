@@ -146,7 +146,7 @@ export default function EmployeeForm({ error, setNewUserFunction, setValidationF
             setter(value);
     }
 
-    useEffect(() => { setValidationFunction({ validate }); setNewUserFunction({ getEmployee }) }, [uuid, username, email, password, first, last, gender, streetNumber, streetName, city, state, country, postcode, dob, phone, title, idName, idValue, nationality]);
+    useEffect(() => { setValidationFunction({ validate }); setNewUserFunction({ getEmployee }) }, [uuid, username, email, password, first, last, gender, streetNumber, streetName, city, state, country, postcode, dob, phone, title, idName, idValue, nationality, setValidationFunction, setNewUserFunction]);
 
 
     return (

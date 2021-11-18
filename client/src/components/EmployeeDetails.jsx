@@ -1,11 +1,10 @@
-import { Typography, CardMedia, Grid, Container, Button } from '@material-ui/core';
-import { Card } from '@mui/material';
+import { Button, CardMedia, Container, Grid, Typography } from '@material-ui/core';
 import { AppRegistration, CalendarToday, EmailOutlined, ExploreOutlined, Fingerprint, LocationOnOutlined, PermIdentity } from '@mui/icons-material';
+import { Card } from '@mui/material';
 import axios from 'axios';
+import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
-import moment from 'moment';
-import Colors from '../utils/Colors'
 
 export default function EmployeeDetails() {
     const { username } = useParams();

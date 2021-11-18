@@ -36,6 +36,7 @@ export default function EmployeesGrid() {
     const [rowSize, setRowSize] = useState(undefined);
     const [selected, setSelected] = useState([]);
     const [isUpdateGrid, setUpdateGrid] = useState(false);
+    const [filters, setFilters] = useState('');
 
     function updateGrid() { setUpdateGrid(!isUpdateGrid) }
 
@@ -45,11 +46,12 @@ export default function EmployeesGrid() {
         (async () => {
             setLoading(true);
 
+            console.log()
             {
                 const { data } = await axios.get(process.env.REACT_APP_API_FETCH_EMPLOYEES_COUNT);
                 setRowCount(data.count)
             }
-            const { data } = await axios.get(`${process.env.REACT_APP_API_FETCH_EMPLOYEES}?offset=${page * pageSize}&limit=${pageSize}`);
+            const { data } = await axios.get(`${process.env.REACT_APP_API_FETCH_EMPLOYEES}?offset=${page * pageSize}&limit=${pageSize}&filters=${filters}`);
             const newRows = Object.keys(data).map(key => {
                 const { name, login, dob, nat } = data[key];
                 return {
@@ -75,12 +77,12 @@ export default function EmployeesGrid() {
         return () => {
             active = false;
         };
-    }, [page, pageSize, rowCount, isUpdateGrid]);
+    }, [page, pageSize, rowCount, isUpdateGrid, filters]);
 
 
     return (
         <Paper style={{ height: '86.5vh', width: '100%' }}>
-            <GridToolbar selected={selected} setRowSize={setRowSize} updateGrid={updateGrid} />
+            <GridToolbar selected={selected} setRowSize={setRowSize} updateGrid={updateGrid} setFilters={setFilters} />
             <DataGrid
                 rows={rows}
                 rowHeight={rowSize}

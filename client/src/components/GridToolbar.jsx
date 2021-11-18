@@ -7,11 +7,13 @@ import DeleteConfirmation from "./DeleteConfirmation";
 import GridHeightMenu from "./GridHeightMenu";
 import GridMenu from "./GridMenu";
 import ToolbarStyle from "./ToolbarStyle";
+import FilterMenu from "./FilterMenu";
 
-export default function GridToolbar({ selected, setRowSize, updateGrid }) {
+export default function GridToolbar({ selected, setRowSize, updateGrid, setFilters }) {
 
     const [visible, setVisible] = useState(false);
     const [heightMenuVisible, setHeightMenuVisible] = useState(false);
+    const [filterMenuVisible, setFilterMenuVisible] = useState(false);
 
     const [addOpen, setAddOpen] = useState(false);
     const [updateOpen, setUpdateOpen] = useState(false);
@@ -63,8 +65,9 @@ export default function GridToolbar({ selected, setRowSize, updateGrid }) {
 
                     <Divider orientation={'vertical'} flexItem></Divider>
 
-                    <Button>
+                    <Button onClick={_ => setFilterMenuVisible(true)}>
                         <FilterList /> <span style={{ marginLeft: '0.25rem' }}>Filter</span>
+                        <FilterMenu visible={filterMenuVisible} setVisible={setFilterMenuVisible} setFilters={setFilters} />
                     </Button>
 
                     <Button onClick={_ => setHeightMenuVisible(true)}>
